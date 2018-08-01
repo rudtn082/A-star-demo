@@ -33,9 +33,7 @@ public class Finder extends JPanel implements MouseListener
 
 	public Finder()
 	{
-		// Change this to whatever map you want, and feel free to add more.
 		int[][] m = m0;
-//		int[][] m = m1;
 
 		setPreferredSize(new Dimension(m[0].length * 32, m.length * 32));
 		addMouseListener(this);
@@ -86,14 +84,19 @@ public class Finder extends JPanel implements MouseListener
 	{
 		int mx = e.getX() / 32;
 		int my = e.getY() / 32;
+		System.out.printf("%d %d\n", mx, my);
 		if (map.getNode(mx, my).isWalkable())
 		{
-			path = map.findPath(player.getX(), player.getY(), mx, my);
+			System.out.println("클릭한 곳에 침수가 발생하여 길이 막힙니다.");
+			m0[my][mx] = 1;
+			map = new Map(m0);
+			
+			path = map.findPath(player.getX(), player.getY(), 11, 8);
 			player.followPath(path);
 		}
 		else
 		{
-			System.out.println("Can't walk to that node!");
+			System.out.println("이미 갈 수 없는 곳입니다.");
 		}
 	}
 

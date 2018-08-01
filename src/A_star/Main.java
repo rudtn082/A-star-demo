@@ -10,8 +10,8 @@ import javax.swing.JFrame;
 public class Main
 {
 
-	public static final int WIDTH = 640;
-	public static final int HEIGHT = 480;
+	public static final int WIDTH = 1280;
+	public static final int HEIGHT = 640;
 	public static final String NAME = "에이스타 데모프로그램";
 
 	private static BufferedImage image;
@@ -71,7 +71,6 @@ public class Main
 				tickCount++;
 				if (tickCount % 30 == 0)
 				{
-					// System.out.println("FPS:" + frames);
 					lastTime += 1000;
 					frames = 0;
 				}
@@ -79,6 +78,9 @@ public class Main
 
 			if (ticked)
 			{
+				g = null;
+				g = (Graphics2D) image.getGraphics();
+				
 				finder.render(g);
 
 				Graphics gg = finder.getGraphics();
