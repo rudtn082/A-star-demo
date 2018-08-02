@@ -40,6 +40,7 @@ public class Finder extends JPanel implements MouseListener
 		
 		map = new Map(m);
 		player = new Player(1, 1);
+		Best_Exit();
 	}
 
 	public void update()
@@ -63,6 +64,36 @@ public class Finder extends JPanel implements MouseListener
 		g.setColor(Color.RED);
 		g.fillRect(player.getX() * 32 + player.getSx(), player.getY() * 32 + player.getSy(), 32, 32);
 	}
+	
+	// 최적 경로찾기
+	public void Best_Exit() {
+		List<Node> Temp_path[] = new List[3];
+		Temp_path[0] = map.findPath(player.getX(), player.getY(), 11, 8); // 경로1
+		Temp_path[1] = map.findPath(player.getX(), player.getY(), 9, 7); // 경로2
+		Temp_path[2] = map.findPath(player.getX(), player.getY(), 5, 1); // 경로3
+		
+		int lowest_SF = map.lowestFList(Temp_path[0]);
+		int temp = 0;
+		
+		for(int i = 0; i < Temp_path.length; i++) {
+			if(map.lowestFList(Temp_path[i]) == 0) continue;
+			if(lowest_SF > map.lowestFList(Temp_path[i])) {
+				lowest_SF = map.lowestFList(Temp_path[i]);
+				temp = i;
+			}
+		}
+		
+		for(int i = 0; i < Temp_path.length; i++) {
+			if(map.lowestFList(Temp_path[i]) != 0) break;
+			System.out.println(Temp_path.length);
+			if(i+1 == Temp_path.length) {
+				System.out.println("경로를 찾을 수 없습니다.. ㅠㅠ");
+			}
+		}
+		
+		path = Temp_path[temp];
+		player.followPath(path);
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e)
@@ -84,15 +115,14 @@ public class Finder extends JPanel implements MouseListener
 	{
 		int mx = e.getX() / 32;
 		int my = e.getY() / 32;
-		System.out.printf("%d %d\n", mx, my);
+		System.out.printf("%d %d\n", mx, my); // 지울것
 		if (map.getNode(mx, my).isWalkable())
 		{
 			System.out.println("클릭한 곳에 침수가 발생하여 길이 막힙니다.");
 			m0[my][mx] = 1;
 			map = new Map(m0);
-			
-			path = map.findPath(player.getX(), player.getY(), 11, 8);
-			player.followPath(path);
+			System.out.println("경로를 재 탐색 합니다...");
+			Best_Exit(); // 침수 발생 시 경로 재 탐색
 		}
 		else
 		{

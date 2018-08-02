@@ -267,6 +267,14 @@ public class Map
 		}
 		return cheapest;
 	}
+	
+	public int lowestFList(List<Node> list) {
+		int SumAllF = 0;
+		for (int i = 0; i < list.size(); i++) {
+			SumAllF += list.get(i).getF();
+		}
+		return SumAllF;
+	}
 
 	/**
 	 * @param node
