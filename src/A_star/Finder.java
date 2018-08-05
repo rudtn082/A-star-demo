@@ -82,6 +82,11 @@ public class Finder extends JPanel implements MouseListener {
 
 	public void update() {
 		player.update();
+		if((player.getFloor() == 0 && player.getX() == 4 && player.getY() == 9) || (player.getFloor() == 0 && player.getX() == 5 && player.getY() == 9)) {
+	         player.setFloor(1);
+	         Move_Map();
+	         System.out.println("2층으로 이동 합니다.");
+	      }
 	}
 
 	public void render(Graphics2D g) {
@@ -106,6 +111,7 @@ public class Finder extends JPanel implements MouseListener {
 		} else {
 			System.out.println("맵 이동 오류입니다.");
 		}
+		Best_Exit();
 	}
 
 	// 최적 경로찾기
@@ -190,7 +196,7 @@ public class Finder extends JPanel implements MouseListener {
 				}
 			}
 
-			path = Temp_path[temp];
+			path = Temp_path2[temp];
 			player.followPath(path);
 		} else {
 			System.out.println("경로 찾기 오류입니다.");
