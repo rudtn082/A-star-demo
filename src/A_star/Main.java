@@ -7,11 +7,9 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-public class Main
-{
-
-	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 640;
+public class Main {
+	public static final int WIDTH = 640;
+	public static final int HEIGHT = 1280;
 	public static final String NAME = "에이스타 데모프로그램";
 
 	private static BufferedImage image;
@@ -20,8 +18,7 @@ public class Main
 
 	private static Finder finder;
 
-	private static void init()
-	{
+	private static void init() {
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics();
 		g.setBackground(Color.BLACK);
@@ -29,18 +26,15 @@ public class Main
 		finder = new Finder();
 	}
 
-	private static void start()
-	{
+	private static void start() {
 		run();
 	}
 
-	public static void stop()
-	{
+	public static void stop() {
 		forceQuit = true;
 	}
 
-	public static void run()
-	{
+	public static void run() {
 		@SuppressWarnings("unused")
 		int frames = 0;
 
@@ -49,8 +43,7 @@ public class Main
 		double secondsPerTick = 1.0 / 30.0;
 		int tickCount = 0;
 
-		while (!forceQuit)
-		{
+		while (!forceQuit) {
 			long now = System.nanoTime();
 			long passedTime = now - lastTime;
 			lastTime = now;
@@ -62,25 +55,22 @@ public class Main
 			unprocessedSeconds += passedTime / 1000000000.0;
 
 			boolean ticked = false;
-			while (unprocessedSeconds > secondsPerTick)
-			{
+			while (unprocessedSeconds > secondsPerTick) {
 				finder.update();
 				unprocessedSeconds -= secondsPerTick;
 				ticked = true;
 
 				tickCount++;
-				if (tickCount % 30 == 0)
-				{
+				if (tickCount % 30 == 0) {
 					lastTime += 1000;
 					frames = 0;
 				}
 			}
 
-			if (ticked)
-			{
+			if (ticked) {
 				g = null;
 				g = (Graphics2D) image.getGraphics();
-				
+
 				finder.render(g);
 
 				Graphics gg = finder.getGraphics();
@@ -88,23 +78,17 @@ public class Main
 				gg.dispose();
 
 				frames++;
-			}
-			else
-			{
-				try
-				{
+			} else {
+				try {
 					Thread.sleep(1);
-				}
-				catch (InterruptedException e)
-				{
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 	}
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		Main.init();
 
 		JFrame frame = new JFrame(NAME);

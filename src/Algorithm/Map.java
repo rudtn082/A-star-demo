@@ -11,8 +11,7 @@ import java.util.List;
  * @author dopke
  *
  */
-public class Map
-{
+public class Map {
 
 	/**
 	 * The width of the map, in columns.
@@ -30,23 +29,20 @@ public class Map
 	private Node[][] nodes;
 
 	/**
-	 * Creates a map based on a two dimensional array, where each zero is a
-	 * walkable node and any other number is not.
+	 * Creates a map based on a two dimensional array, where each zero is a walkable
+	 * node and any other number is not.
 	 * 
 	 * @param map
 	 *            The map array used to creating the map.
 	 */
-	public Map(int[][] map)
-	{
+	public Map(int[][] map) {
 		this.width = map[0].length;
 		this.height = map.length;
 		nodes = new Node[width][height];
 
-		for (int x = 0; x < width; x++)
-		{
-			for (int y = 0; y < height; y++)
-			{
-				nodes[x][y] = new Node(x, y, map[y][x] == 0);
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				nodes[x][y] = new Node(x, y, map[y][x]);
 			}
 		}
 	}
@@ -56,28 +52,23 @@ public class Map
 	 * node drawn black and each node that is in the path in yellow.
 	 * 
 	 * @param g
-	 *            A <code>Graphics</code> object in order to be able to draw
-	 *            things.
+	 *            A <code>Graphics</code> object in order to be able to draw things.
 	 * @param path
-	 *            Optional parameter. List containing the nodes to be drawn as
-	 *            path nodes.
+	 *            Optional parameter. List containing the nodes to be drawn as path
+	 *            nodes.
 	 */
-	public void drawMap(Graphics g, List<Node> path)
-	{
-		for (int y = 0; y < height; y++)
-		{
-			for (int x = 0; x < width; x++)
-			{
-				if (!nodes[x][y].isWalkable())
-				{
+	public void drawMap(Graphics g, List<Node> path) {
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (nodes[x][y].isWalkable() == 1) {
 					g.setColor(Color.WHITE);
-				}
-				else if (path != null && path.contains(new Node(x, y, true)))
-				{
+				} else if (nodes[x][y].isWalkable() == 2) {
+					g.setColor(Color.GREEN);
+				} else if (nodes[x][y].isWalkable() == 3) {
+					g.setColor(Color.ORANGE);
+				} else if (path != null && path.contains(new Node(x, y, 0))) {
 					g.setColor(Color.YELLOW);
-				}
-				else
-				{
+				} else {
 					g.setColor(Color.BLACK);
 				}
 				g.fillRect(x * 32, y * 32, 32, 32);
@@ -86,30 +77,24 @@ public class Map
 	}
 
 	/**
-	 * Prints the map to the standard out, where each walkable node is simply
-	 * not printed, each non-walkable node is printed as a '#' (pound sign) and
-	 * each node that is in the path as a '@' (at sign).
+	 * Prints the map to the standard out, where each walkable node is simply not
+	 * printed, each non-walkable node is printed as a '#' (pound sign) and each
+	 * node that is in the path as a '@' (at sign).
 	 * 
 	 * @param path
-	 *            Optional parameter. List containing the nodes to be drawn as
-	 *            path nodes.
+	 *            Optional parameter. List containing the nodes to be drawn as path
+	 *            nodes.
 	 */
-	public void printMap(List<Node> path)
-	{
-		for (int j = 0; j < height; j++)
-		{
-			for (int i = 0; i < width; i++)
-			{
-				if (!nodes[i][j].isWalkable())
-				{
+	public void printMap(List<Node> path) {
+		for (int j = 0; j < height; j++) {
+			for (int i = 0; i < width; i++) {
+				if (nodes[i][j].isWalkable() == 1) {
 					System.out.print(" #");
-				}
-				else if (path.contains(new Node(i, j, true)))
-				{
+				} else if (nodes[i][j].isWalkable() == 2) {
+					System.out.print(" *");
+				} else if (path.contains(new Node(i, j, 0))) {
 					System.out.print(" @");
-				}
-				else
-				{
+				} else {
 					System.out.print("  ");
 				}
 			}
@@ -118,8 +103,8 @@ public class Map
 	}
 
 	/**
-	 * If the X and Y parameters are within the map boundaries, return the node
-	 * in the specific coordinates, null otherwise.
+	 * If the X and Y parameters are within the map boundaries, return the node in
+	 * the specific coordinates, null otherwise.
 	 * 
 	 * @param x
 	 *            Desired node's X coordinate.
@@ -127,14 +112,10 @@ public class Map
 	 *            Desired node's Y coordinate.
 	 * @return The desired node if the parameters are valid, null otherwise.
 	 */
-	public Node getNode(int x, int y)
-	{
-		if (x >= 0 && x < width && y >= 0 && y < height)
-		{
+	public Node getNode(int x, int y) {
+		if (x >= 0 && x < width && y >= 0 && y < height) {
 			return nodes[x][y];
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}
@@ -150,14 +131,12 @@ public class Map
 	 *            The X coordinate of the goal position.
 	 * @param goalY
 	 *            The Y coordinate of the goal position.
-	 * @return A list containing all of the visited nodes if there is a
-	 *         solution, an empty list otherwise.
+	 * @return A list containing all of the visited nodes if there is a solution, an
+	 *         empty list otherwise.
 	 */
-	public final List<Node> findPath(int startX, int startY, int goalX, int goalY)
-	{
+	public final List<Node> findPath(int startX, int startY, int goalX, int goalY) {
 		// If our start position is the same as our goal position ...
-		if (startX == goalX && startY == goalY)
-		{
+		if (startX == goalX && startY == goalY) {
 			// Return an empty path, because we don't need to move at all.
 			return new LinkedList<Node>();
 		}
@@ -172,8 +151,7 @@ public class Map
 
 		// This loop will be broken as soon as the current node position is
 		// equal to the goal position.
-		while (true)
-		{
+		while (true) {
 			// Gets node with the lowest F score from open list.
 			Node current = lowestFInList(openList);
 			// Remove current node from open list.
@@ -182,18 +160,15 @@ public class Map
 			closedList.add(current);
 
 			// If the current node position is equal to the goal position ...
-			if ((current.getX() == goalX) && (current.getY() == goalY))
-			{
+			if ((current.getX() == goalX) && (current.getY() == goalY)) {
 				// Return a LinkedList containing all of the visited nodes.
 				return calcPath(nodes[startX][startY], current);
 			}
 
 			List<Node> adjacentNodes = getAdjacent(current, closedList);
-			for (Node adjacent : adjacentNodes)
-			{
+			for (Node adjacent : adjacentNodes) {
 				// If node is not in the open list ...
-				if (!openList.contains(adjacent))
-				{
+				if (!openList.contains(adjacent)) {
 					// Set current node as parent for this node.
 					adjacent.setParent(current);
 					// Set H costs of this node (estimated costs to goal).
@@ -205,8 +180,7 @@ public class Map
 				}
 				// Else if the node is in the open list and the G score from
 				// current node is cheaper than previous costs ...
-				else if (adjacent.getG() > adjacent.calculateG(current))
-				{
+				else if (adjacent.getG() > adjacent.calculateG(current)) {
 					// Set current node as parent for this node.
 					adjacent.setParent(current);
 					// Set G costs of this node (costs from start to this node).
@@ -215,8 +189,7 @@ public class Map
 			}
 
 			// If no path exists ...
-			if (openList.isEmpty())
-			{
+			if (openList.isEmpty()) {
 				// Return an empty list.
 				return new LinkedList<Node>();
 			}
@@ -232,18 +205,15 @@ public class Map
 	 * @return a list containing all of the visited nodes, from the goal to the
 	 *         start.
 	 */
-	private List<Node> calcPath(Node start, Node goal)
-	{
+	private List<Node> calcPath(Node start, Node goal) {
 		LinkedList<Node> path = new LinkedList<Node>();
 
 		Node node = goal;
 		boolean done = false;
-		while (!done)
-		{
+		while (!done) {
 			path.addFirst(node);
 			node = node.getParent();
-			if (node.equals(start))
-			{
+			if (node.equals(start)) {
 				done = true;
 			}
 		}
@@ -255,19 +225,16 @@ public class Map
 	 *            The list to be checked.
 	 * @return The node with the lowest F score in the list.
 	 */
-	private Node lowestFInList(List<Node> list)
-	{
+	private Node lowestFInList(List<Node> list) {
 		Node cheapest = list.get(0);
-		for (int i = 0; i < list.size(); i++)
-		{
-			if (list.get(i).getF() < cheapest.getF())
-			{
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getF() < cheapest.getF()) {
 				cheapest = list.get(i);
 			}
 		}
 		return cheapest;
 	}
-	
+
 	public int lowestFList(List<Node> list) {
 		int SumAllF = 0;
 		for (int i = 0; i < list.size(); i++) {
@@ -281,11 +248,10 @@ public class Map
 	 *            The node to be checked for adjacent nodes.
 	 * @param closedList
 	 *            A list containing all of the nodes already visited.
-	 * @return A LinkedList with nodes adjacent to the given node if those
-	 *         exist, are walkable and are not already in the closed list.
+	 * @return A LinkedList with nodes adjacent to the given node if those exist,
+	 *         are walkable and are not already in the closed list.
 	 */
-	private List<Node> getAdjacent(Node node, List<Node> closedList)
-	{
+	private List<Node> getAdjacent(Node node, List<Node> closedList) {
 		List<Node> adjacentNodes = new LinkedList<Node>();
 		int x = node.getX();
 		int y = node.getY();
@@ -293,41 +259,33 @@ public class Map
 		Node adjacent;
 
 		// Check left node
-		if (x > 0)
-		{
+		if (x > 0) {
 			adjacent = getNode(x - 1, y);
-			if (adjacent != null && adjacent.isWalkable() && !closedList.contains(adjacent))
-			{
+			if (adjacent != null && (adjacent.isWalkable() == 0 || adjacent.isWalkable() == 2) && !closedList.contains(adjacent)) {
 				adjacentNodes.add(adjacent);
 			}
 		}
 
 		// Check right node
-		if (x < width)
-		{
+		if (x < width) {
 			adjacent = getNode(x + 1, y);
-			if (adjacent != null && adjacent.isWalkable() && !closedList.contains(adjacent))
-			{
+			if (adjacent != null && (adjacent.isWalkable() == 0 || adjacent.isWalkable() == 2) && !closedList.contains(adjacent)) {
 				adjacentNodes.add(adjacent);
 			}
 		}
 
 		// Check top node
-		if (y > 0)
-		{
+		if (y > 0) {
 			adjacent = this.getNode(x, y - 1);
-			if (adjacent != null && adjacent.isWalkable() && !closedList.contains(adjacent))
-			{
+			if (adjacent != null && (adjacent.isWalkable() == 0 || adjacent.isWalkable() == 2) && !closedList.contains(adjacent)) {
 				adjacentNodes.add(adjacent);
 			}
 		}
 
 		// Check bottom node
-		if (y < height)
-		{
+		if (y < height) {
 			adjacent = this.getNode(x, y + 1);
-			if (adjacent != null && adjacent.isWalkable() && !closedList.contains(adjacent))
-			{
+			if (adjacent != null && (adjacent.isWalkable() == 0 || adjacent.isWalkable() == 2) && !closedList.contains(adjacent)) {
 				adjacentNodes.add(adjacent);
 			}
 		}
