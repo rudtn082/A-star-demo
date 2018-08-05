@@ -82,7 +82,7 @@ public class Finder extends JPanel implements MouseListener {
 
 	public void update() {
 		player.update();
-		if((player.getFloor() == 0 && player.getX() == 4 && player.getY() == 9) || (player.getFloor() == 0 && player.getX() == 5 && player.getY() == 9)) {
+		if((player.getFloor() == 0 && player.getX() == 4 && player.getY() == 9) || (player.getFloor() == 0 && player.getX() == 5 && player.getY() == 9)) { // 1층 계단에 도착했을 경우
 	         player.setFloor(1);
 	         Move_Map();
 	         System.out.println("2층으로 이동 합니다.");
@@ -102,7 +102,8 @@ public class Finder extends JPanel implements MouseListener {
 		g.setColor(Color.RED);
 		g.fillRect(player.getX() * 32 + player.getSx(), player.getY() * 32 + player.getSy(), 32, 32);
 	}
-
+	
+	// 맵 이동 함수
 	public void Move_Map() {
 		if (player.getFloor() == 0) {
 			map = new Map(m0);
@@ -114,7 +115,7 @@ public class Finder extends JPanel implements MouseListener {
 		Best_Exit();
 	}
 
-	// 최적 경로찾기
+	// 최적 경로찾기 함수
 	public void Best_Exit() {
 		Map map2 = new Map(m1); // 경로를 찾기위해 임시 2층맵 생성
 		List<Node> Temp_path[] = new List[4];
@@ -123,7 +124,6 @@ public class Finder extends JPanel implements MouseListener {
 		Temp_path[1] = map.findPath(player.getX(), player.getY(), 5, 9); // 1층 계단2
 		Temp_path[2] = map.findPath(player.getX(), player.getY(), 0, 14); // 1층 탈출구1
 		Temp_path[3] = map.findPath(player.getX(), player.getY(), 9, 14); // 1층 탈출구2
-		/* 3,3이 계단이라고 가정(2층도면 아직 미완) */
 		Temp_path2[0] = map2.findPath(player.getX(), player.getY(), 1, 1); // 2층 탈출구1
 		Temp_path2[1] = map2.findPath(player.getX(), player.getY(), 2, 2); // 2층 탈출구2
 		Temp_path2[2] = map2.findPath(player.getX(), player.getY(), 3, 3); // 2층 탈출구3
@@ -165,7 +165,7 @@ public class Finder extends JPanel implements MouseListener {
 				}
 			}
 
-			if (lowest_SF > lowest_SF2 + map.lowestFList(Temp_path[0])) {
+			if (lowest_SF > lowest_SF2 + map.lowestFList(Temp_path[0])) { // 1층 탈출구 and (1층 계단 + 2층 탈출구)중 어느것이 빠른지 비교
 				path = Temp_path2[temp2];
 				player.followPath(path);
 			} else if (lowest_SF <= lowest_SF2 + map.lowestFList(Temp_path[0])) {
@@ -219,7 +219,7 @@ public class Finder extends JPanel implements MouseListener {
 	public void mousePressed(MouseEvent e) {
 		int mx = e.getX() / 32;
 		int my = e.getY() / 32;
-		System.out.printf("%d %d\n", mx, my); // 좌표확인! (지울것)
+		System.out.printf("%d %d\n", mx, my); // 좌표확인! (나중에 지울것)
 		if (map.getNode(mx, my).isWalkable() == 0) {
 			System.out.println("클릭한 곳에 침수가 발생하여 길이 막힙니다.");
 
